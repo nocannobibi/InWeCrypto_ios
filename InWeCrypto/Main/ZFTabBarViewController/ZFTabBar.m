@@ -67,11 +67,21 @@
     {
         return;
     }
+    
+    //添加按钮图片跳动动画
+    CAKeyframeAnimation *animation = [CAKeyframeAnimation animationWithKeyPath:@"transform.scale"];
+    animation.values = @[@(1.0) ,@(1.4), @(0.9), @(1.15), @(0.95), @(1.02), @(1.0)];
+    animation.duration = .5f;
+    animation.calculationMode = kCAAnimationCubic;
+    
+    [button.imageView.layer addAnimation:animation forKey:nil];
+    
     self.selectedButton.selected = NO;
     button.selected = YES;
     self.selectedButton = button;
 }
 
+/*
 - (void)layoutSubviews
 {
     [super layoutSubviews];
@@ -93,4 +103,39 @@
         button.tag = index;
     }
 }
+*/
+
+/**
+ *  layout
+ */
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    // 按钮的frame数据
+    CGFloat buttonH = self.frame.size.height;
+    CGFloat buttonW = self.frame.size.width / self.subviews.count;
+    CGFloat buttonY = 0;
+    
+    for (int index = 0; index < self.subviews.count; index ++) {
+        // 1.取出按钮
+        ZFTabBarButton *button = self.subviews[index];
+        
+        // 2.设置按钮的frame
+        CGFloat buttonX = index * buttonW;
+        if (index == 0) {
+            buttonY = 10;
+        }
+        else{
+            buttonY = 0;
+        }
+        button.frame = CGRectMake(buttonX, buttonY, buttonW, buttonH);
+        
+        // 3.绑定tag
+        button.tag = index;
+    }
+
+    
+    
+}
+
 @end

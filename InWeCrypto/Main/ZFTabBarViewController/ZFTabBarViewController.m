@@ -75,6 +75,7 @@
  *  @param to     最新选中的位置
  */
 - (void)tabBar:(ZFTabBar *)tabBar didSelectedButtonFrom:(NSInteger)from to:(NSInteger)to {
+    
     if ([UserSignData share].user.isCode && to != 0)
     {
         //冷钱包进入
@@ -95,17 +96,17 @@
     // 1.资讯
     InformationViewController *informationViewController = [[InformationViewController alloc] init];
     informationViewController.tabBarItem.badgeValue = @"";
-    [self setupChildViewController:informationViewController title:DBHGetStringWithKeyFromTable(@"News", nil) imageName:@"zixun_ico_s" selectedImageName:@"zixun_ico"];
+    [self setupChildViewController:informationViewController title:nil imageName:@"zixun_ico_s" selectedImageName:@"zixun_ico"];
     
-    // 1.项目
+    // 2.项目
     ProjectViewController *projectViewController = [[ProjectViewController alloc] init];
     projectViewController.tabBarItem.badgeValue = @"";
-    [self setupChildViewController:projectViewController title:DBHGetStringWithKeyFromTable(@"News", nil) imageName:@"zixun_ico_s" selectedImageName:@"zixun_ico"];
+    [self setupChildViewController:projectViewController title:DBHGetStringWithKeyFromTable(@"Project", nil) imageName:@"project_ico_s" selectedImageName:@"project_ico"];
     
     // 3.排行
     RankingViewController *rankingViewController = [[RankingViewController alloc] init];
     rankingViewController.tabBarItem.badgeValue = @"";
-    [self setupChildViewController:rankingViewController title:DBHGetStringWithKeyFromTable(@"News", nil) imageName:@"zixun_ico_s" selectedImageName:@"zixun_ico"];
+    [self setupChildViewController:rankingViewController title:DBHGetStringWithKeyFromTable(@"Ranking", nil) imageName:@"ranking_ico_s" selectedImageName:@"ranking_ico"];
     
     if (![self isReview]) { // 不在审核中
         // 4.钱包
@@ -140,15 +141,17 @@
     } else {
         childVc.tabBarItem.title = title;
     }
+    
     // 设置图标
-    childVc.tabBarItem.image = [UIImage imageNamed:imageName];
-    // 设置选中的图标
-    UIImage *selectedImage = [UIImage imageNamed:selectedImageName];
-    if (iOS7) {
-        childVc.tabBarItem.selectedImage = [selectedImage imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    } else {
-        childVc.tabBarItem.selectedImage = selectedImage;
+    if (imageName) {
+        childVc.tabBarItem.image = [[UIImage imageNamed:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     }
+
+    // 设置选中的图标
+    if (selectedImageName) {
+        childVc.tabBarItem.selectedImage =  [[UIImage imageNamed:selectedImageName] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    }
+    
     
     // 2.包装一个导航控制器
     DBHBaseNavigationController *nav = [[DBHBaseNavigationController alloc] initWithRootViewController:childVc];
